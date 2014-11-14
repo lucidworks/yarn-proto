@@ -160,40 +160,31 @@ public class SolrClient {
     log.info("\n\nSolr (" + appId + ") is " + appState+"\n\n");
 
     if (appState == YarnApplicationState.RUNNING) {
-
-      log.info("\n\n PINGING Solr Cluster \n\n");
-
-      Thread.sleep(10000);
+      Thread.sleep(5000);
       try {
-        pingSolrCluster(zkHost);
+        pingSolrCluster(zkHost, 3);
       } catch (Exception exc) {
-        log.error("\n\n FAILED TO PING SOLR due to: "+exc+" \n\n", exc);
+        log.error("Failed to ping Solr cluster due to: "+exc, exc);
       }
     }
   }
 
-  protected void pingSolrCluster(String zkHost) throws Exception {
+  public static void pingSolrCluster(String zkHost, int maxRetries) throws Exception {
     CloudSolrServer cloudSolrServer = null;
     try {
       cloudSolrServer = new CloudSolrServer(zkHost);
-      log.info("\n\nConnecting to ZooKeeper at " + zkHost+"\n\n");
       cloudSolrServer.connect();
 
       Set<String> liveNodes = cloudSolrServer.getZkStateReader().getClusterState().getLiveNodes();
       if (liveNodes.isEmpty()) {
-        log.error("\n\n ERROR: No live nodes found! \n\n");
         throw new IllegalStateException("No live nodes found!");
       }
       String firstLiveNode = liveNodes.iterator().next();
       String solrUrl = cloudSolrServer.getZkStateReader().getBaseUrlForNodeName(firstLiveNode);
       if (!solrUrl.endsWith("/"))
         solrUrl += "/";
-      String systemInfoUrl = solrUrl+"admin/info/system";
 
-      log.info("\n\n systemInfoUrl="+systemInfoUrl+"\n\n");
-
-      Map<String,Object> pingResp = getJson(systemInfoUrl);
-      System.out.println("\n\n pingResp="+pingResp+" \n\n");
+      getJson(solrUrl+"admin/info/system", maxRetries);
     } finally {
       if (cloudSolrServer != null) {
         try {
@@ -239,11 +230,11 @@ public class SolrClient {
   /**
    * Useful when a tool just needs to send one request to Solr.
    */
-  public static Map<String,Object> getJson(String getUrl) throws Exception {
+  public static Map<String,Object> getJson(String getUrl, int maxRetries) throws Exception {
     Map<String,Object> json = null;
     HttpClient httpClient = getHttpClient();
     try {
-      json = getJson(httpClient, getUrl, 2);
+      json = getJson(httpClient, getUrl, maxRetries);
     } finally {
       closeHttpClient(httpClient);
     }

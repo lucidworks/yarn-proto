@@ -237,9 +237,6 @@ public class SolrMaster implements AMRMClientAsync.CallbackHandler {
   }
 
   public void onContainersCompleted(List<ContainerStatus> containerStatuses) {
-
-    log.info("\n\n\n onContainersCompleted(" + containerStatuses + ") \n\n\n");
-
     for (ContainerStatus status : containerStatuses) {
       log.info("Completed container " + status.getContainerId());
       synchronized (this) {
@@ -249,9 +246,7 @@ public class SolrMaster implements AMRMClientAsync.CallbackHandler {
   }
 
   public void onShutdownRequest() {
-
-    log.info("\n\n\n onShutdownRequest ... shutting down: " + solrHosts + " \n\n\n");
-
+    log.info("onShutdownRequest ... shutting down: " + solrHosts);
     for (String host : solrHosts.keySet()) {
       for (Integer port : solrHosts.get(host)) {
         stopJettyOnHost(host, port, randomStopKey);
@@ -278,12 +273,9 @@ public class SolrMaster implements AMRMClientAsync.CallbackHandler {
   }
 
   public void onNodesUpdated(List<NodeReport> nodeReports) {
-
-    log.info("\n\n\n onNodesUpdated \n\n\n");
     for (NodeReport report : nodeReports) {
       log.info("Node: " + report);
     }
-
   }
 
   public float getProgress() {
@@ -291,12 +283,7 @@ public class SolrMaster implements AMRMClientAsync.CallbackHandler {
   }
 
   public void onError(Throwable throwable) {
-    log.info("\n\n\n BEG onError \n\n\n");
-
     log.error(throwable);
-
-    log.info("\n\n\n END onError \n\n\n");
-
   }
 
   private static Options getOptions() {
