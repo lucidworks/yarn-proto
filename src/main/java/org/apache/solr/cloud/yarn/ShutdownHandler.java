@@ -1,4 +1,4 @@
-package com.lucidworks.yarn;
+package org.apache.solr.cloud.yarn;
 
 import java.io.IOException;
 import java.util.HashSet;

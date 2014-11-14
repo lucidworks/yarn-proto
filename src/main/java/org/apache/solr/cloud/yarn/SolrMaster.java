@@ -1,5 +1,6 @@
-package com.lucidworks.yarn;
+package org.apache.solr.cloud.yarn;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.InetAddress;
@@ -71,7 +72,13 @@ public class SolrMaster implements AMRMClientAsync.CallbackHandler {
 
   public SolrMaster(CommandLine cli) throws Exception {
     this.cli = cli;
-    conf = new YarnConfiguration();
+    Configuration hadoopConf = new Configuration();
+    if (cli.hasOption("conf")) {
+      hadoopConf.addResource(new Path(cli.getOptionValue("conf")));
+      hadoopConf.reloadConfiguration();
+    }
+    conf = new YarnConfiguration(hadoopConf);
+
     nmClient = NMClient.createNMClient();
     nmClient.init(conf);
     nmClient.start();
@@ -216,7 +223,7 @@ public class SolrMaster implements AMRMClientAsync.CallbackHandler {
         ctx.setLocalResources(localResourcesMap);
 
         String cmd = String.format(command, jettyPort, randomStopKey);
-        log.info("Running command: " + cmd);
+        log.info("\n\nRunning command: " + cmd);
 
         ctx.setCommands(Collections.singletonList(
                 cmd + " >" + ApplicationConstants.LOG_DIR_EXPANSION_VAR + "/stdout 2>&1"
@@ -343,7 +350,13 @@ public class SolrMaster implements AMRMClientAsync.CallbackHandler {
                     .hasArg()
                     .isRequired(true)
                     .withDescription("Number of Solr nodes to deploy; default is 1")
-                    .create("nodes")
+                    .create("nodes"),
+            OptionBuilder
+                    .withArgName("PATH")
+                    .hasArg()
+                    .isRequired(false)
+                    .withDescription("YARN ResourceManager address")
+                    .create("conf")
     };
   }
 }

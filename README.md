@@ -1,4 +1,4 @@
-Lucidworks YARN Integration Prototype
+Lucidworks Solr on YARN Integration
 ========
 
 Solr on YARN - simple client / master needed to deploy SolrCloud into YARN.
@@ -31,7 +31,7 @@ hdfs dfs -mkdir solr_data
 5. Deploy Solr on YARN
 
 ```
-hadoop jar target/yarn-proto-1.0-SNAPSHOT.jar com.lucidworks.yarn.SolrClient \
+hadoop jar target/yarn-proto-1.0-SNAPSHOT.jar org.apache.solr.cloud.yarn.SolrClient \
   -nodes=2 \
   -zkHost=localhost:2181 \
   -solr=hdfs://localhost:9000/user/timpotter/solr-4.10.0.tgz \
@@ -53,7 +53,7 @@ The client application will output log messages like:
 For details on how to use the SolrClient utility, do:
 
 ```
-hadoop jar target/yarn-proto-1.0-SNAPSHOT.jar com.lucidworks.yarn.SolrClient --help
+hadoop jar target/yarn-proto-1.0-SNAPSHOT.jar org.apache.solr.cloud.yarn.SolrClient --help
 ```
 
 6. Navigate to the YARN ResourceManager Web UI @ http://localhost:8088/cluster
@@ -68,14 +68,14 @@ yarn application -kill <APPID>
 Shutdown Handler
 ========
 
-To enable graceful shutdown of Solr running in YARN, we need to deploy the com.lucidworks.yarn.ShutdownHandler
+To enable graceful shutdown of Solr running in YARN, we need to deploy the org.apache.solr.cloud.yarn.ShutdownHandler
 into the Jetty container:
 
 A. Add the YarnShutdownHandler to the list of handlers in example/etc/jetty.xml:
 
 ```
 <Item>
-  <New id="YarnShutdownHandler" class="com.lucidworks.yarn.ShutdownHandler"/>
+  <New id="YarnShutdownHandler" class="org.apache.solr.cloud.yarn.ShutdownHandler"/>
 </Item>
 ```
 
