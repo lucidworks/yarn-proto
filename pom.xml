@@ -7,67 +7,67 @@
   <version>1.0-SNAPSHOT</version>
   <name>yarn-proto</name>
   <url>http://maven.apache.org</url>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>gen-classpath</id>
-                        <phase>generate-test-resources</phase>
-                        <goals>
-                            <goal>build-classpath</goal>
-                        </goals>
-                        <configuration>
-                            <includeScope>compile</includeScope>
-                            <outputFile>${project.build.directory}/classpath</outputFile>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>create-mrapp-generated-classpath</id>
-                        <phase>generate-test-resources</phase>
-                        <goals>
-                            <goal>build-classpath</goal>
-                        </goals>
-                        <configuration>
-                            <!-- needed to run the unit test for DS to generate the required classpath
-                            that is required in the env of the launch container in the mini mr/yarn cluster -->
-                            <outputFile>${project.build.directory}/test-classes/mrapp-generated-classpath</outputFile>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.9</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.18</version>
-                <goals>
-                    <goal>integration-test</goal>
-                    <goal>verify</goal>
-                </goals>
-                <configuration>
-                    <includes>
-                        <include>**/*IT.java</include>
-                    </includes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>failsafe-integration-tests</id>
-                        <phase>integration-test</phase>
-                        <goals>
-                            <goal>integration-test</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>gen-classpath</id>
+            <phase>generate-test-resources</phase>
+            <goals>
+              <goal>build-classpath</goal>
+            </goals>
+            <configuration>
+              <includeScope>compile</includeScope>
+              <outputFile>${project.build.directory}/classpath</outputFile>
+            </configuration>
+          </execution>
+          <execution>
+            <id>create-mrapp-generated-classpath</id>
+            <phase>generate-test-resources</phase>
+            <goals>
+              <goal>build-classpath</goal>
+            </goals>
+            <configuration>
+              <!-- needed to run the unit test for DS to generate the required classpath
+                   that is required in the env of the launch container in the mini mr/yarn cluster -->
+              <outputFile>${project.build.directory}/test-classes/mrapp-generated-classpath</outputFile>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.9</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>2.18</version>
+        <goals>
+          <goal>integration-test</goal>
+          <goal>verify</goal>
+        </goals>
+        <configuration>
+          <includes>
+            <include>**/*IT.java</include>
+          </includes>
+        </configuration>
+        <executions>
+          <execution>
+            <id>failsafe-integration-tests</id>
+            <phase>integration-test</phase>
+            <goals>
+              <goal>integration-test</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
   <dependencies>
     <dependency>
       <groupId>org.apache.hadoop</groupId>
@@ -79,12 +79,12 @@
       <artifactId>hadoop-common</artifactId>
       <version>2.4.1</version>
     </dependency>
-      <dependency>
-          <groupId>org.apache.hadoop</groupId>
-          <artifactId>hadoop-minicluster</artifactId>
-          <version>2.4.1</version>
-      </dependency>
-      <dependency>
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-minicluster</artifactId>
+      <version>2.4.1</version>
+    </dependency>
+    <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-server</artifactId>
       <version>8.1.10.v20130312</version>
@@ -96,24 +96,15 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-          <groupId>org.apache.curator</groupId>
-          <artifactId>curator-test</artifactId>
-          <version>2.7.0</version>
+      <groupId>org.apache.curator</groupId>
+      <artifactId>curator-test</artifactId>
+      <version>2.7.0</version>
     </dependency>
-      <!--
-      <dependency>
-          <groupId>org.apache.hadoop</groupId>
-          <artifactId>hadoop-yarn-client</artifactId>
-          <version>2.4.1</version>
-      </dependency>
-      -->
-
-      <dependency>
-          <groupId>org.apache.solr</groupId>
-          <artifactId>solr-solrj</artifactId>
-          <version>4.10.1</version>
-          <type>jar</type>
-      </dependency>
-
+    <dependency>
+      <groupId>org.apache.solr</groupId>
+      <artifactId>solr-solrj</artifactId>
+      <version>4.10.1</version>
+      <type>jar</type>
+    </dependency>
   </dependencies>
 </project>
